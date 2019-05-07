@@ -1,0 +1,5 @@
+*~
+venv/
+config.file
+monitor.db
+monitor.log

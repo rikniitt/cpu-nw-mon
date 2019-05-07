@@ -1,0 +1,6 @@
+LOG_PATH=monitor.log
+LOG_LEVEL=DEBUG
+
+DB_PATH=monitor.db
+
+INTERVAL=5
