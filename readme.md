@@ -8,6 +8,7 @@ Tested on ubuntu 16.04. Not robust.
 
  * Python 3
  * Python virtualenv
+ * SQLite 3
  * *nix
 
 # Install
