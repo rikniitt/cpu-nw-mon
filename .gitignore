@@ -1,5 +1,13 @@
 *~
+*.swp
+
 venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+
 config.file
 monitor.db
 monitor.log
