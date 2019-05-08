@@ -28,7 +28,7 @@ pip install -r requirements.txt
 ```
 
 The network connections monitoring requires root privileges and the monitor
-should be runningas background process. Starting the monitor in screen:
+should be running as background process. Starting the monitor in screen:
 
 ```
 screen -S monitord

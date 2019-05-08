@@ -123,7 +123,7 @@ def plot_stats(start, end):
 @click.option("--start", "-s", required=False, type=click.DateTime(), default=None)
 @click.option("--end", "-e", required=False, type=click.DateTime(), default=None)
 def plot_stats(start, end):
-    """ Plot statistics """
+    """ Print observations """
     if not start:
         start = datetime.now() - timedelta(hours=24)
     if not end:
