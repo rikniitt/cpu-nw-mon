@@ -2,13 +2,14 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 from datetime import datetime
 
 def observations(observations):
     """ Plot observations """
-    y_users = np.array([obs["users"] for obs in observations])
+    y_users = np.array([obs["users"] for obs in observations], dtype=int)
     y_load = np.array([obs["load_average"] for obs in observations])
-    y_cons = np.array([obs["network_connections"] for obs in observations])
+    y_cons = np.array([obs["network_connections"] for obs in observations], dtype=int)
 
     x_labels = [datetime.strptime(obs["created_at"], "%Y-%m-%d %H:%M:%S") for obs in observations]
 
@@ -17,7 +18,8 @@ def observations(observations):
         "From %s to %s" % (x_labels[0].strftime("%Y-%m-%d %H:%M:%S"), x_labels[-1].strftime("%Y-%m-%d %H:%M:%S"))
     )
 
-    plt.subplot(311)
+    axes = plt.subplot(311)
+    axes.yaxis.set_major_locator(MaxNLocator(integer=True))
     plt.plot(x_labels, y_users, "b-")
     plt.ylabel("users")
 
@@ -25,7 +27,8 @@ def observations(observations):
     plt.plot(x_labels, y_load, "c--")
     plt.ylabel("load average")
 
-    plt.subplot(313)
+    axes = plt.subplot(313)
+    axes.yaxis.set_major_locator(MaxNLocator(integer=True))
     plt.plot(x_labels, y_cons, "m-.")
     plt.ylabel("nw connections")
 
