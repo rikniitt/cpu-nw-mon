@@ -74,17 +74,19 @@ def create_network_connections(observation_id, network_connections):
         cursor.execute(sql, values)
         db.commit()
 
-def update_observation(observation_id, uptime, network_connections):
-    """ Create new raw observation """
+def update_observation(observation_id, uptime, network_connections, process_count, free_memory):
+    """ Update observation row """
     db = connect()
     cursor = db.cursor()
 
-    sql = "UPDATE observation SET uptime = ?, users = ?, load_average = ?, network_connections = ? WHERE id = ?"
+    sql = "UPDATE observation SET uptime = ?, users = ?, load_average_1 = ?, network_connections = ?, processes = ?, free_memory = ? WHERE id = ?"
     values = (
         uptime["uptime"],
         uptime["users"],
-        uptime["load_average"],
+        uptime["load_average_1"],
         len(network_connections),
+        process_count,
+        free_memory["free"],
         observation_id
     )
 

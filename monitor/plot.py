@@ -8,7 +8,7 @@ from datetime import datetime
 def observations(observations):
     """ Plot observations """
     y_users = np.array([obs["users"] for obs in observations], dtype=int)
-    y_load = np.array([obs["load_average"] for obs in observations])
+    y_load = np.array([obs["load_average_1"] for obs in observations])
     y_cons = np.array([obs["network_connections"] for obs in observations], dtype=int)
 
     x_labels = [datetime.strptime(obs["created_at"], "%Y-%m-%d %H:%M:%S") for obs in observations]

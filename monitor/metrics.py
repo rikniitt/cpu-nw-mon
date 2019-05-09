@@ -11,16 +11,19 @@ def parse_uptime(cli_output):
     csv = cli_output.split(",")
 
     uptime = csv[1].strip()
-    users = re.sub("[^0-9]", "", csv[2])
+    users = int(re.sub("[^0-9]", "", csv[2]))
 
-    load = re.search("load average:\s+(\d,\d\d)", cli_output).group(1)
-    load = re.sub(",", ".", load)
-    load_average = float(load)
+    matches = re.search("load average:\s+(\d,\d\d),\s+(\d,\d\d),\s+(\d,\d\d)", cli_output)
+    load_1 = float(re.sub(",", ".", matches.group(1)))
+    load_5 = float(re.sub(",", ".", matches.group(1)))
+    load_15 = float(re.sub(",", ".", matches.group(1)))
 
     return {
         "uptime": uptime,
         "users": users,
-        "load_average": load_average,
+        "load_average_1": load_1,
+        "load_average_5": load_5,
+        "load_average_15": load_15
     }
 
 def get_network_connections():
@@ -44,3 +47,22 @@ def parse_network_connections(cli_output):
         })
 
     return parsed
+
+def get_process_count():
+    return check_output(["ps", "aux", "--sort=-pcpu"]).decode("utf-8")
+
+def parse_process_count(cli_output):
+    # It would better to use pipe and wc to get this, but py subprocess with pipes is clumsy
+    return len(cli_output.split("\n")) - 1
+
+def get_free_memory():
+    return check_output("free").decode("utf-8")
+
+def parse_free_memory(cli_output):
+    matches = re.search("Mem:\s+(\d+)\s+(\d+)\s+(\d+)", cli_output)
+
+    return {
+        "total": int(matches.group(1)),
+        "used": int(matches.group(2)),
+        "free": int(matches.group(3))
+    }

@@ -11,5 +11,5 @@ def dt_now_str():
 
 def load_config():
     """ Read and parse the config file """
-    config_path = Path(".") / "config.file"
+    config_path = (Path(".") / "config.file").as_posix()
     load_dotenv(dotenv_path=config_path)

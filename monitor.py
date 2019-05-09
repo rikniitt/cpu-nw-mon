@@ -37,8 +37,12 @@ def db_create():
                 created_at TEXT,
                 uptime TEXT,
                 users INTEGER,
-                load_average REAL,
-                network_connections INTEGER
+                load_average_1 REAL,
+                load_average_5 REAL,
+                load_average_15 REAL,
+                network_connections INTEGER,
+                processes INTEGER,
+                free_memory INTEGER
             )
         """,
         """
@@ -99,11 +103,21 @@ def start():
         net_cons_out = monitor.metrics.get_network_connections()
         monitor.db.create_observation_raw(obs_id, "network_connections", net_cons_out)
         net_cons = monitor.metrics.parse_network_connections(net_cons_out)
-
         monitor.db.create_network_connections(obs_id, net_cons)
-        monitor.db.update_observation(obs_id, uptime, net_cons)
 
-        log("Going to sleep for %d sec" % sleep_time)
+        ps_cnt_out = monitor.metrics.get_process_count()
+        ps_cnt_save = ps_cnt_out[:5000] + " ..." if len(ps_cnt_out) > 5000 else ps_cnt_out
+        monitor.db.create_observation_raw(obs_id, "process_count", ps_cnt_save)
+        ps_cnt = monitor.metrics.parse_process_count(ps_cnt_out)
+
+        free_mem_out = monitor.metrics.get_free_memory()
+        monitor.db.create_observation_raw(obs_id, "free_memory", free_mem_out)
+        free_mem = monitor.metrics.parse_free_memory(free_mem_out)
+
+        monitor.db.update_observation(obs_id, uptime, net_cons, ps_cnt, free_mem)
+        obs = monitor.db.get_observation(obs_id)
+
+        log("%s Going to sleep for %d sec" % (str(obs), sleep_time))
         time.sleep(sleep_time)
 
 @monitor_cli.command("plot-stats")
